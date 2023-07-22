@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/path/to/shared/folder
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/path/to/shared/folder
+
+volumes:
+  shared_volume:

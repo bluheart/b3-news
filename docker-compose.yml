@@ -2,19 +2,21 @@ version: '3'
 
 services:
 
-  api:
+  b3newsapi:
     build:
       context: ./api
       dockerfile: Dockerfile
     volumes:
-      - shared_volume:/path/to/shared/folder
+      - b3newsdatabase:/home/b3newsdb
+    expose:
+      - "80"
+    ports:
+      - "80:80"
 
   worker:
     build:
       context: ./worker
       dockerfile: Dockerfile
-    volumes:
-      - shared_volume:/path/to/shared/folder
 
 volumes:
-  shared_volume:
+  b3newsdatabase:

@@ -8,6 +8,6 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
 
-RUN crontab crontab
+RUN crontab ./app/crontab
 
 CMD ["crond", "-f"]

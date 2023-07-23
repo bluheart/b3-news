@@ -1,1 +1,1 @@
-*/15 * * * * python ./main.py
+*/15 * * * * python /code/app/main.py

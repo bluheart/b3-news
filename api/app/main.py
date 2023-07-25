@@ -10,7 +10,6 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-
 @app.get("/news")
 def test_news(db: Session = Depends(get_db)):
     db_item = db.query(models.News).all()

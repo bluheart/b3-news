@@ -1,10 +1,23 @@
 
 import requests
+import pandas as pd
 
-b3url = "https://sistemasweb.b3.com.br/PlantaoNoticias/Noticias/ListarTitulosNoticias?agencia=18"
-url = "http://b3newsapi/bulk_news"
+B3_URL = "https://sistemasweb.b3.com.br/PlantaoNoticias/Noticias/ListarTitulosNoticiasInicial?agencia=18"
+API_URL = "http://b3newsapi/bulk_news"
 
-response = requests.get(b3url)
+def load_data():
+    response = requests.get(B3_URL)
+    response = [record['NwsMsg'] for record in response.json()]
+    df = pd.json_normalize(response)
+    df = apply_calculation(df) # optional, if creating new columns here need to add them in the API as well
+    #add new columns to response before sending to POST
 
-response = [record['NwsMsg'] for record in response.json()]
-x = requests.post(url, json = response)
+    x = requests.post(API_URL, json = response)
+    print(x)
+
+# in case you need aditional proccessing
+def apply_calculation(df):
+    return df
+
+if __name__ == "__main__":
+    load_data()

@@ -34,12 +34,15 @@ def create_news(news: schemas.CreateNews, db: Session = Depends(get_db)):
 
 @app.post("/bulk_news", status_code=status.HTTP_201_CREATED)
 def create_news(news: List[schemas.CreateNews], db: Session = Depends(get_db)):
-    try:
-        db.bulk_insert_mappings(models.News, news)
-        db.commit()
-    except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
-        return f"Failed to insert: {error}"
+    for n in news:
+        try:
+            n_news = models.News(**n.model_dump())
+            db.add(n_news)
+            db.commit()
+            print('news inserted')
+        except SQLAlchemyError as e:
+            error = str(e.__dict__)
+        
     
 @app.delete("/news/{id}", status_code=status.HTTP_200_OK)
 def delete_item(id: int, db: Session = Depends(get_db)):

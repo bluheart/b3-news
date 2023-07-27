@@ -6,3 +6,6 @@ class CreateNews(BaseModel):
     dateTime: datetime
     headline: str
     id: int
+    prob: float
+    status: str
+    treated: bool

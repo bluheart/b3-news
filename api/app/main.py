@@ -41,7 +41,7 @@ def create_news(news: List[schemas.CreateNews], db: Session = Depends(get_db)):
             db.commit()
             print('news inserted')
         except SQLAlchemyError as e:
-            error = str(e.__dict__)
+            pass
         
 @app.put("/news/{id}", status_code=status.HTTP_200_OK)
 def update_news(news: schemas.CreateNews, id: int, db: Session = Depends(get_db)):

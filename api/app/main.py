@@ -14,7 +14,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 @app.get("/news")
-def test_news(dateStart: date | None = None, dateEnd: date | None = date.today(), db: Session = Depends(get_db)):
+def get_news(dateStart: date | None = None, dateEnd: date | None = date.today(), db: Session = Depends(get_db)):
     if dateStart is None:
         db_item = db.query(models.News).all()
     else: 
@@ -43,11 +43,22 @@ def create_news(news: List[schemas.CreateNews], db: Session = Depends(get_db)):
         except SQLAlchemyError as e:
             error = str(e.__dict__)
         
+@app.put("/news/{id}", status_code=status.HTTP_200_OK)
+def update_news(news: schemas.CreateNews, id: int, db: Session = Depends(get_db)):
+    db_item = db.query(models.News).filter(models.News.id == id)
+    n_news = db_item.first()
+    if n_news == None:
+        raise HTTPException(status_code=404, detail="Item not found")
     
+    db_item.update(news.dict())
+    db.commit()
+    return news
+
+
 @app.delete("/news/{id}", status_code=status.HTTP_200_OK)
-def delete_item(id: int, db: Session = Depends(get_db)):
+def delete_news(id: int, db: Session = Depends(get_db)):
     db_item = db.query(models.News).filter(models.News.id == id).first()
-    if db_item is None:
+    if db_item == None:
         raise HTTPException(status_code=404, detail="Item not found")
     db.delete(db_item)
     db.commit()

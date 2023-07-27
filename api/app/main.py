@@ -50,7 +50,7 @@ def update_news(news: schemas.CreateNews, id: int, db: Session = Depends(get_db)
     if n_news == None:
         raise HTTPException(status_code=404, detail="Item not found")
     
-    db_item.update(news.dict())
+    db_item.update(news.model_dump())
     db.commit()
     return news
 
